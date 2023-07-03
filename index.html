@@ -13,53 +13,64 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
 
     <title>Frontend Mentor | Planets fact site</title>
-    <script src="script.js"></script>
   </head>
   <body>
     <header>
       <span class="logo-font">The planets</span>
       <nav>
         <ul>
-          <li>Mercury</li>
-          <li>Venus</li>
-          <li>Earth</li>
-          <li>Mars</li>
-          <li>Jupiter</li>
-          <li>Saturn</li>
-          <li>Uranus</li>
-          <li>Neptune</li>
+          <li id="mercury">Mercury</li>
+          <li id="venus">Venus</li>
+          <li id="earth">Earth</li>
+          <li id="mars">Mars</li>
+          <li id="jupiter">Jupiter</li>
+          <li id="saturn">Saturn</li>
+          <li id="uranus">Uranus</li>
+          <li id="neptune">Neptune</li>
         </ul>
       </nav>
     </header>
     <main>
       <section class="planet-section">
         <div class="planet-div">
-          <img src="./assets/planet-mercury.svg" alt="Mercury" />
+          <img
+            class="planet-image"
+            src="./assets/planet-mercury.svg"
+            alt="Mercury" />
+          <img
+            class="geology-planet-image"
+            src="./assets/geology-mercury.png"
+            alt="Geology Mercury" />
         </div>
 
         <div class="info-planet-div">
-          <h1>Mercury</h1>
-          <p>
-            Mercury is the smallest planet in the Solar System and the closest
-            to the Sun. Its orbit around the Sun takes 87.97 Earth days, the
-            shortest of all the Sun's planets. Mercury is one of four
-            terrestrial planets in the Solar System, and is a rocky body like
-            Earth.
-          </p>
-          <div class="link-wiki-div">
-            <span>Source :</span>
-            <a href="http://#">Wikipedia</a
-            ><img
-              src="./assets/external-link-square-with-an-arrow-in-right-diagonal.svg"
-              alt="Wikipedia" />
+          <div>
+            <h1 id="planet-name-h1">Mercury</h1>
+            <p id="info-paragraph">
+              Mercury is the smallest planet in the Solar System and the closest
+              to the Sun. Its orbit around the Sun takes 87.97 Earth days, the
+              shortest of all the Sun's planets. Mercury is one of four
+              terrestrial planets in the Solar System, and is a rocky body like
+              Earth.
+            </p>
+            <div class="link-wiki-div">
+              <span>Source :</span>
+              <a
+                id="wiki-link"
+                href="https://en.wikipedia.org/wiki/Mercury_(planet)"
+                >Wikipedia<img
+                  src="./assets/external-link-square-with-an-arrow-in-right-diagonal.svg"
+                  alt="Wikipedia"
+              /></a>
+            </div>
           </div>
           <div class="buttons-div">
-            <button class="active-button overview-button">
+            <button id="overview-button" class="active info-button">
               <span>01</span> &nbsp;&nbsp;&nbsp;OVERVIEW
             </button>
-            <button class="structure-button">
+            <button id="structure-button" class="info-button">
               <span>02</span> &nbsp;&nbsp;&nbsp;INTERNAL STRUCTURE</button
-            ><button class="surface-button">
+            ><button id="geology-button" class="info-button">
               <span>03</span> &nbsp;&nbsp;&nbsp;SURFACE GEOLOGY
             </button>
           </div>
@@ -68,21 +79,22 @@
       <section class="statistics-section">
         <div>
           <h5>Rotation Time</h5>
-          <h2>58.6 Days</h2>
+          <h2 id="rotation">58.6 Days</h2>
         </div>
         <div>
           <h5>Revolution Time</h5>
-          <h2>87.97 Days</h2>
+          <h2 id="revolution">87.97 Days</h2>
         </div>
         <div>
           <h5>Radius</h5>
-          <h2>2,439.7 KM</h2>
+          <h2 id="radius">2,439.7 KM</h2>
         </div>
         <div>
           <h5>Average Temp.</h5>
-          <h2>430°c</h2>
+          <h2 id="temp">430°c</h2>
         </div>
       </section>
     </main>
+    <script src="script.js" type="text/javascript"></script>
   </body>
 </html>
