@@ -15,45 +15,72 @@
     <title>Frontend Mentor | Planets fact site</title>
   </head>
   <body>
-    <header>
-      <span class="logo-font">The planets</span>
-      <nav>
-        <ul>
-          <li id="mercury">Mercury</li>
-          <li id="venus">Venus</li>
-          <li id="earth">Earth</li>
-          <li id="mars">Mars</li>
-          <li id="jupiter">Jupiter</li>
-          <li id="saturn">Saturn</li>
-          <li id="uranus">Uranus</li>
-          <li id="neptune">Neptune</li>
-        </ul>
+    <header class="header">
+      <span class="header__logo">The planets</span>
+      <nav class="header__list">
+        <button id="planetItem" class="header__mercury">
+          <span class="circle"></span>
+          Mercury <img src="./assets/right-arrow.svg" alt="Mercury" />
+        </button>
+        <button id="planetItem" class="header__venus">
+          <span class="circle"></span>
+          Venus <img src="./assets/right-arrow.svg" alt="Venus" />
+        </button>
+        <button id="planetItem" class="header__earth">
+          <span class="circle"></span>
+          Earth <img src="./assets/right-arrow.svg" alt="Earth" />
+        </button>
+        <button id="planetItem" class="header__mars">
+          <span class="circle"></span>
+          Mars <img src="./assets/right-arrow.svg" alt="Mars" />
+        </button>
+        <button id="planetItem" class="header__jupiter">
+          <span class="circle"></span>
+          Jupiter <img src="./assets/right-arrow.svg" alt="Jupiter" />
+        </button>
+        <button id="planetItem" class="header__saturn">
+          <span class="circle"></span>
+          Saturn <img src="./assets/right-arrow.svg" alt="Saturn" />
+        </button>
+        <button id="planetItem" class="header__uranus">
+          <span class="circle"></span>
+          Uranus <img src="./assets/right-arrow.svg" alt="Uranus" />
+        </button>
+        <button id="planetItem" class="header__neptune">
+          <span class="circle"></span>
+          Neptune <img src="./assets/right-arrow.svg" alt="Neptune" />
+        </button>
       </nav>
+      <img
+        id="burger-menu"
+        class="header__burger-menu visually-hidden"
+        src="./assets/icon-hamburger.svg"
+        alt="Menu" />
     </header>
     <main>
-      <section class="planet-section">
-        <div class="planet-div">
+      <section class="planet">
+        <div class="planet__images">
           <img
-            class="planet-image"
+            class="planet__main-image"
             src="./assets/planet-mercury.svg"
             alt="Mercury" />
           <img
-            class="geology-planet-image"
+            class="planet__secondary-image"
             src="./assets/geology-mercury.png"
             alt="Geology Mercury" />
         </div>
 
-        <div class="info-planet-div">
-          <div>
-            <h1 id="planet-name-h1">Mercury</h1>
-            <p id="info-paragraph">
+        <div class="info">
+          <div class="info__main-info">
+            <h1 class="info__title">Mercury</h1>
+            <p class="info__paragraph">
               Mercury is the smallest planet in the Solar System and the closest
               to the Sun. Its orbit around the Sun takes 87.97 Earth days, the
               shortest of all the Sun's planets. Mercury is one of four
               terrestrial planets in the Solar System, and is a rocky body like
               Earth.
             </p>
-            <div class="link-wiki-div">
+            <div class="wiki-div">
               <span>Source :</span>
               <a
                 id="wiki-link"
@@ -64,34 +91,35 @@
               /></a>
             </div>
           </div>
-          <div class="buttons-div">
-            <button id="overview-button" class="active info-button">
-              <span>01</span> &nbsp;&nbsp;&nbsp;OVERVIEW
+          <div class="buttons__div">
+            <button id="buttons___secondary" class="button__overview">
+              <span class="numberButton">01</span>OVERVIEW
             </button>
-            <button id="structure-button" class="info-button">
-              <span>02</span> &nbsp;&nbsp;&nbsp;INTERNAL STRUCTURE</button
-            ><button id="geology-button" class="info-button">
-              <span>03</span> &nbsp;&nbsp;&nbsp;SURFACE GEOLOGY
+            <button id="buttons___secondary" class="button__structure">
+              <span class="numberButton">02</span
+              ><span>INTERNAL </span>STRUCTURE</button
+            ><button id="buttons___secondary" class="button__geology">
+              <span class="numberButton">03</span>SURFACE <span>GEOLOGY</span>
             </button>
           </div>
         </div>
       </section>
-      <section class="statistics-section">
+      <section class="statistics">
         <div>
-          <h5>Rotation Time</h5>
-          <h2 id="rotation">58.6 Days</h2>
+          <h5 class="statistics__title">Rotation Time</h5>
+          <h2 id="rotation" class="statistics__value">58.6 Days</h2>
         </div>
         <div>
-          <h5>Revolution Time</h5>
-          <h2 id="revolution">87.97 Days</h2>
+          <h5 class="statistics__title">Revolution Time</h5>
+          <h2 id="revolution" class="statistics__value">87.97 Days</h2>
         </div>
         <div>
-          <h5>Radius</h5>
-          <h2 id="radius">2,439.7 KM</h2>
+          <h5 class="statistics__title">Radius</h5>
+          <h2 id="radius" class="statistics__value">2,439.7 KM</h2>
         </div>
         <div>
-          <h5>Average Temp.</h5>
-          <h2 id="temp">430°c</h2>
+          <h5 class="statistics__title">Average Temp.</h5>
+          <h2 id="temp" class="statistics__value">430°c</h2>
         </div>
       </section>
     </main>

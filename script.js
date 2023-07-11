@@ -1,55 +1,85 @@
-// First aproach-------------
-let planetNavs = document.querySelectorAll('li')
-let infoButton = document.querySelectorAll('.info-button')
-let container = document.querySelector('.planet-div')
-let overviewButton = document.getElementById('overview-button')
-let structureButton = document.getElementById('structure-button')
-let geologyButton = document.getElementById('geology-button')
+//Planet Object
+class Planet {
+  constructor(
+    name,
+    overview,
+    structure,
+    geology,
+    overviewSource,
+    structureSource,
+    geologySource,
+    rotation,
+    revolution,
+    radius,
+    temperature,
+    imagePlanet,
+    imageInternal,
+    imageGeology,
+    activeClass,
+    secondaryActiveClass
+  ) {
+    this.name = name
+    this.overview = overview
+    this.structure = structure
+    this.geology = geology
+    this.overviewSource = overviewSource
+    this.structureSource = structureSource
+    this.geologySource = geologySource
+    this.rotation = rotation
+    this.revolution = revolution
+    this.radius = radius
+    this.temperature = temperature
+    this.imagePlanet = imagePlanet
+    this.imageInternal = imageInternal
+    this.imageGeology = imageGeology
+    this.activeClass = activeClass
+    this.secondaryActiveClass = secondaryActiveClass
+  }
+}
 
-//Data to update in current planet
-let planetName = document.getElementById('planet-name-h1')
-let planetImage = document.querySelector('.planet-image')
-let geologyPlanetImage = document.querySelector('.geology-planet-image')
-let infoParagraph = document.getElementById('info-paragraph')
-let wikiLink = document.getElementById('wiki-link')
-let rotation = document.getElementById('rotation')
-let revolution = document.getElementById('revolution')
-let radius = document.getElementById('radius')
-let temperature = document.getElementById('temp')
-
-//Planets options in header
-let mercury = document.getElementById('mercury')
-let venus = document.getElementById('venus')
-let earth = document.getElementById('earth')
-let mars = document.getElementById('mars')
-let jupiter = document.getElementById('jupiter')
-let saturn = document.getElementById('saturn')
-let uranus = document.getElementById('uranus')
-let neptune = document.getElementById('neptune')
-
-//Colors
-let colorsPerPlanet = [
-  '#419ebb',
-  '#eda249',
-  '#6f2ed6',
-  '#d83a34',
-  '#d83a34',
-  '#d14c32',
-  '#1ec2a4',
-  '#2d68f0',
-]
-
-//Request Fetch
-var planets
+let planets = []
+//Request
 fetch('./data.json')
   .then((response) => {
     if (!response.ok) throw new Error(`Status Code Error: ${response.status}`)
-    response.json().then((data) => {
-      // for (let planet of data) {
-      //   console.log(data)
-      // }
-      planets = data
-      setCurrentPlanetData(0)
+    return response.json()
+  })
+  .then((data) => {
+    planets = data.map((planetData, index) => {
+      return new Planet(
+        planetData.name,
+        planetData.overview.content,
+        planetData.structure.content,
+        planetData.geology.content,
+        planetData.overview.source,
+        planetData.structure.source,
+        planetData.geology.source,
+        planetData.rotation,
+        planetData.revolution,
+        planetData.radius,
+        planetData.temperature,
+        planetData.images.planet,
+        planetData.images.internal,
+        planetData.images.geology,
+        getClassByPosition(index),
+        getSecondaryClasses()[index]
+      )
+    })
+    updateTab(0)
+
+    window.addEventListener('resize', maybeShowMenu)
+    maybeShowMenu()
+
+    const navPlanets = document.querySelectorAll('#planetItem')
+    navPlanets.forEach((navPlanet, index) => {
+      navPlanet.addEventListener('click', () => {
+        updateTab(index)
+        //Here
+        if (isPhoneVersion()) {
+          let headerList = document.querySelector('.header__list')
+          headerList.classList.toggle('visually-hidden')
+        }
+      })
     })
   })
   .catch((err) => {
@@ -57,100 +87,139 @@ fetch('./data.json')
     console.log(err)
   })
 
-planetNavs.forEach((nav) => {
-  nav.addEventListener('click', () => {
-    updatePlanetLi()
+function updateTab(index) {
+  const navPlanets = document.querySelectorAll('#planetItem')
+  const planet = planets[index]
 
-    let currentPlanet = 0
-    switch (nav.textContent) {
-      case 'Mercury':
-        currentPlanet = 0
-        mercury.style.borderTop = 'solid 5px #419ebb'
-        mercury.style.borderBottom = 'solid 5px transparent'
-        break
-      case 'Venus':
-        currentPlanet = 1
-        venus.style.borderTop = 'solid 5px #eda249'
-        venus.style.borderBottom = 'solid 5px transparent'
-        break
-      case 'Earth':
-        currentPlanet = 2
-        earth.style.borderTop = 'solid 5px #6f2ed6'
-        earth.style.borderBottom = 'solid 5px transparent'
+  resetNavColors(navPlanets)
 
-        break
-      case 'Mars':
-        currentPlanet = 3
-        mars.style.borderTop = 'solid 5px #d83a34'
-        mars.style.borderBottom = 'solid 5px transparent'
-        break
-      case 'Jupiter':
-        currentPlanet = 4
-        jupiter.style.borderTop = 'solid 5px #d83a34'
-        jupiter.style.borderBottom = 'solid 5px transparent'
-        break
-      case 'Saturn':
-        currentPlanet = 5
-        saturn.style.borderTop = 'solid 5px #d14c32'
-        saturn.style.borderBottom = 'solid 5px transparent'
-        break
-      case 'Uranus':
-        currentPlanet = 6
-        uranus.style.borderTop = 'solid 5px #1ec2a4'
-        uranus.style.borderBottom = 'solid 5px transparent'
-        break
-      case 'Neptune':
-        currentPlanet = 7
-        neptune.style.borderTop = 'solid 5px #2d68f0'
-        neptune.style.borderBottom = 'solid 5px transparent'
-        break
-    }
+  navPlanets[index].classList.add(getClassByPosition(index))
 
-    setCurrentPlanetData(currentPlanet)
-  })
-})
-
-var updatePlanetLi = () => {
-  planetNavs.forEach((element) => {
-    element.style.borderTop = 'solid 5px transparent'
-    element.style.borderBotton = 'solid 5px transparent'
-  })
+  updatePlanetData(planet)
 }
 
-var setCurrentPlanetData = (pos) => {
-  planetName.textContent = planets[pos].name
-  infoParagraph.textContent = planets[pos].overview.content
-  wikiLink.href = planets[pos].overview.source
-  planetImage.src = planets[pos].images.planet
-  geologyPlanetImage.style.display = 'none'
-  overviewButton.style.backgroundColor = colorsPerPlanet[pos]
-  structureButton.style.backgroundColor = 'transparent'
-  geologyButton.style.backgroundColor = 'transparent'
-  rotation.textContent = planets[pos].rotation
-  revolution.textContent = planets[pos].revolution
-  temperature.textContent = planets[pos].temperature
-  radius.textContent = planets[pos].radius
+function resetNavColors(buttons) {
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].classList.remove(getClassByPosition(i))
+  }
+}
 
-  infoButton.forEach((button) => {
+function updatePlanetData(planet) {
+  let title = document.querySelector('.info__title')
+  title.textContent = planet.name
+
+  let info = document.querySelector('.info__paragraph')
+  info.textContent = planet.overview
+
+  let wiki = document.querySelector('#wiki-link')
+  wiki.href = planet.structureSource
+
+  let imagePlanet = document.querySelector('.planet__main-image')
+  imagePlanet.src = planet.imagePlanet
+
+  let rotation = document.querySelector('#rotation')
+  let revolution = document.querySelector('#revolution')
+  let radius = document.querySelector('#radius')
+  let temp = document.querySelector('#temp')
+
+  rotation.textContent = planet.rotation
+  revolution.textContent = planet.revolution
+  radius.textContent = planet.radius
+  temp.textContent = planet.temperature
+
+  updateInfoButtons(planet)
+
+  let secundaryImage = document.querySelector('.planet__secondary-image')
+  secundaryImage.classList.add('visually-hidden')
+}
+
+function updateInfoButtons(planet) {
+  let buttons = document.querySelectorAll('.buttons__div button')
+  let infoParagraph = document.querySelector('.info__paragraph')
+  let secundaryImage = document.querySelector('.planet__secondary-image')
+  let imagePlanet = document.querySelector('.planet__main-image')
+
+  resetActiveColor(buttons, 0, planet.secondaryActiveClass)
+
+  buttons.forEach((button, pos) => {
     button.addEventListener('click', () => {
-      infoButton.forEach((btn) => (btn.style.backgroundColor = 'transparent'))
-      button.style.backgroundColor = colorsPerPlanet[pos]
-      if (button.innerText === '02    INTERNAL STRUCTURE') {
-        geologyPlanetImage.style.display = 'none'
-        infoParagraph.textContent = planets[pos].structure.content
-        planetImage.src = planets[pos].images.internal
-      } else if (button.innerText === '03    SURFACE GEOLOGY') {
-        button.style.backgroundColor = colorsPerPlanet[pos]
-        planetImage.src = planets[pos].images.planet
-        infoParagraph.textContent = planets[pos].geology.content
-        geologyPlanetImage.src = planets[pos].images.geology
-        geologyPlanetImage.style.display = 'block'
+      resetActiveColor(buttons, pos, planet.secondaryActiveClass)
+      if (pos === 0) {
+        infoParagraph.textContent = planet.overview
+        imagePlanet.src = planet.imagePlanet
+        secundaryImage.classList.add('visually-hidden')
+      } else if (pos === 1) {
+        infoParagraph.textContent = planet.structure
+        secundaryImage.classList.add('visually-hidden')
+        imagePlanet.src = planet.imageInternal
       } else {
-        button.style.backgroundColor = colorsPerPlanet[pos]
-        planetImage.src = planets[pos].images.planet
-        infoParagraph.textContent = planets[pos].overview.content
-        geologyPlanetImage.style.display = 'none'
+        infoParagraph.textContent = planet.geology
+        secundaryImage.src = planet.imageGeology
+        secundaryImage.classList.remove('visually-hidden')
+        imagePlanet.src = planet.imagePlanet
       }
     })
   })
 }
+
+function resetActiveColor(buttons, pos, cssSecondaryClass) {
+  let activeSecundaryClasses = getSecondaryClasses()
+  buttons.forEach((button) => {
+    activeSecundaryClasses.forEach((cssClass) => {
+      button.classList.remove(cssClass)
+    })
+  })
+  buttons[pos].classList.add(cssSecondaryClass)
+}
+
+function getClassByPosition(position) {
+  const accentClasses = [
+    'accent-mercury',
+    'accent-venus',
+    'accent-earth',
+    'accent-mars',
+    'accent-jupiter',
+    'accent-saturn',
+    'accent-uranus',
+    'accent-neptune',
+  ]
+
+  return accentClasses[position]
+}
+
+function getSecondaryClasses() {
+  return [
+    'secondary-accent-mercury',
+    'secondary-accent-venus',
+    'secondary-accent-earth',
+    'secondary-accent-mars',
+    'secondary-accent-jupiter',
+    'secondary-accent-saturn',
+    'secondary-accent-uranus',
+    'secondary-accent-neptune',
+  ]
+}
+
+function maybeShowMenu() {
+  const menu = document.querySelector('.header__burger-menu')
+  const headerList = document.querySelector('.header__list')
+  if (isPhoneVersion()) {
+    // Mostrar el menú en pantallas más pequeñas
+    menu.classList.remove('visually-hidden')
+    headerList.classList.add('visually-hidden')
+  } else {
+    // Ocultar el menú en pantallas más grandes
+    menu.classList.add('visually-hidden')
+    headerList.classList.remove('visually-hidden')
+  }
+}
+
+function isPhoneVersion() {
+  return window.innerWidth <= 712
+}
+
+let burguer = document.querySelector('#burger-menu')
+burguer.addEventListener('click', () => {
+  let headerList = document.querySelector('.header__list')
+  headerList.classList.toggle('visually-hidden')
+})
